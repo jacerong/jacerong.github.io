@@ -1,0 +1,94 @@
+nav.navigation {
+    padding: 15px 2.5% 15px 2.5%;
+}
+
+.section-content {
+    padding: 10em 10% 10em 10%;
+}
+
+img.personal-pic {
+    width: 150px;
+    border-radius: 100%;
+    position: relative;
+}
+
+img.education-logo,
+img.work-logo {
+    width: 4rem;
+}
+
+.display-full-name {
+    max-width: 800px;
+    font-size: 5.5em;
+    font-weight: 700;
+}
+
+.display-ocupation {
+    font-size: 32px;
+    font-weight: 400;
+}
+
+.bg-gray {
+    background-color: #f3f3f3;
+}
+
+.separator {
+    background: #505050 none repeat;
+    height: 1px;
+    width: 40px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.footer-content {
+    background-color: #191919;
+    color: #e5e5e5;
+    padding: 50px 10% 50px 10%;
+}
+
+.footer-content a {
+    color: #e5e5e5;
+}
+
+@media only screen
+  and (max-width: 991px) {
+    nav.navigation {
+        padding: 10px 2% 10px 10%;
+    }
+}
+
+@media only screen
+  and (max-width: 848px)
+  and (min-width: 701px) {
+    .display-full-name {
+        font-size: 4.5em;
+    }
+}
+
+@media only screen
+  and (max-width: 700px)
+  and (min-width: 626px) {
+    .display-full-name {
+        font-size: 4em;
+    }
+}
+
+@media only screen
+  and (max-width: 625px)
+  and (min-width: 552px) {
+    .display-full-name {
+        font-size: 3.5em;
+    }
+}
+
+@media only screen
+  and (max-width: 551px) {
+    .display-full-name {
+        font-size: 30px;
+        max-width: 240px;
+    }
+
+    .display-ocupation {
+        font-size: 20px;
+    }
+}
