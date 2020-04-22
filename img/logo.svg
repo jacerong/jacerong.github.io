@@ -9,9 +9,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="75.400002mm"
-   height="58.5mm"
-   viewBox="0 0 75.400002 58.5"
+   width="63.700001mm"
+   height="63.700001mm"
+   viewBox="0 0 63.700002 63.700001"
    version="1.1"
    id="svg8"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8"
-     inkscape:cx="147.18449"
-     inkscape:cy="122.77132"
+     inkscape:cx="158.5744"
+     inkscape:cy="116.08239"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -59,29 +59,30 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-55.47155,-70.679734)">
+     transform="translate(-55.47155,-65.479735)">
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:sans-serif;letter-spacing:-2.9739964px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="59.6847"
-       y="124.23938"
-       id="text18"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.56203175px;line-height:1.25;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono';letter-spacing:-4.09686089px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26405078"
+       x="59.667889"
+       y="121.34882"
+       id="text18"
+       transform="scale(0.99798726,1.0020168)"><tspan
          sodipodi:role="line"
          id="tspan16"
-         x="59.6847"
-         y="124.23938"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:50.79999924px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';letter-spacing:-2.9739964px;fill:#000000;fill-opacity:1;stroke-width:0.26458332">0n</tspan></text>
+         x="59.667889"
+         y="121.34882"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50.69775009px;line-height:1.25;font-family:'DejaVu Sans Mono';-inkscape-font-specification:'DejaVu Sans Mono';letter-spacing:-4.09686089px;fill:#000000;fill-opacity:1;stroke-width:0.26405078">0n</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="66.235023"
-       y="115.37823"
+       x="61.622349"
+       y="112.73241"
        id="text18-5"><tspan
          sodipodi:role="line"
          id="tspan16-7"
-         x="66.235023"
-         y="115.37823"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50.79999924px;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:#000000;fill-opacity:1;stroke-width:0.26458332">´</tspan></text>
+         x="61.622349"
+         y="112.73241"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50.79999924px;font-family:'DejaVu Sans Mono';-inkscape-font-specification:'DejaVu Sans Mono';fill:#000000;fill-opacity:1;stroke-width:0.26458332">´</tspan></text>
     <ellipse
        style="fill:#ffffff;fill-opacity:1;stroke-width:0.29269022"
        id="path4551"
