@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en" class="h-100">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, shrink-to-fit=no">
+
+        <title>Extracting Features From the History of Crimes Recently Committed and Within the Area of Influence</title>
+        <meta name="description" content="A feature engineering strategy that supports the predictive power of an ensemble-based approach to crime classification.">
+
+        <!-- Open Graph -->
+        <meta property="og:title" content="Extracting Features From the History of Crimes Recently Committed and Within the Area of Influence" />
+        <meta property="og:description" content="A feature engineering strategy that supports the predictive power of an ensemble-based approach to crime classification." />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://jacerong.com/blog/feature-engineering-strategy-for-crime-classification.html" />
+        <meta property="og:image" content="https://jacerong.com/img/blog/sf-crime/crime-map.png" />
+
+        <!-- Icon -->
+        <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+
+        <!-- CSS Files -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/jacerong.css">
+    </head>
+    <body class="d-flex flex-column h-100">
+
+        <!-- Navigation -->
+        <header>
+
+            <nav class="navigation navbar navbar-expand-lg navbar-light bg-white fixed-top">
+
+                <div class="container-fluid">
+
+                    <a class="navbar-brand d-flex align-items-center" href="/">
+                        <img src="/img/logo.svg" width="20" height="20">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-links" aria-controls="navbar-links" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <!-- Navigation Links -->
+                    <div class="collapse navbar-collapse" id="navbar-links">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="/blog/">Blog</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/resources.html">Resources</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- End Navigation Links -->
+
+                </div>
+
+            </nav>
+
+        </header>
+        <!-- End Navigation -->
+
+        <!-- Page Content -->
+        <main role="main" class="flex-shrink-0 padding-top-bottom-10em">
+
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-lg-12 margin-auto">
+
+                        <h1 class="font-weight-bolder mb-0">
+                            Extracting Features From the History of Crimes Recently Committed and Within the Area of Influence
+                        </h1>
+                        <p class="mt-2 mb-4">
+                            <small class="text-secondary">by Jhon Adrián Cerón-Guzmán on April 24, 2020</small>
+                        </p>
+
+                        <p>
+                            <a href="https://www.kaggle.com/c/sf-crime/" class="text-decoration-none">San Francisco Crime Classification</a> is a Kaggle challenge related to multi-class classification. In particular, the proposed task has to do with classifying each record in the dataset into one out of 39 categories of crime. The dataset comprises 1,762,311 crime records, 878,049 of which have a category (i.e., the training set). These crime records range from January 2003 to May 2015. Regarding the performance evaluation, predictive models are evaluated on the test set using the multi-class logarithmic loss metric.
+                        </p>
+
+                        <p>
+                            As a solution approach to the challenge pointed out above, this article explores the ability to extract valuable information from the history of crimes recently committed and relatively close to each other. In a like manner, it proposes a methodology to develop a stacked generalization ensemble to crime classification.
+                        </p>
+
+                        <h2 class="h3">Feature Engineering</h2>
+
+                        <p>
+                            This process explores the ability to extract valuable information from the history of crimes recently committed and relatively close to each other. In other words, to each crime <var>c</var>, whose position in the map is depicted by the white filled circle and area of influence corresponds to the red filled circle, the history of crimes comprises all those from the previous hours before <var>c</var> and within the area of influence.
+                        </p>
+
+                        <div class="d-flex justify-content-center">
+                            <figure class="figure">
+                                <img src="/img/blog/sf-crime/crime-map.png" class="figure-img img-fluid rounded" alt="San Francisco Map"/>
+                                <figcaption class="figure-caption text-center">
+                                    A crime instance in San Francisco, which is is depicted by the white filled circle and whose area of influence corresponds to the red filled circle.
+                                    Credits: <a href="https://www.google.com/maps">Google Maps</a> and <a href="https://www.mapdevelopers.com/draw-circle-tool.php">Map Developers</a>.
+                                </figcaption>
+                            </figure>
+                        </div>
+
+                        <h2 class="h3">Stacking Ensemble</h2>
+
+                        <p>
+                            The methodology to develop a stacked generalization ensemble goes from splitting the initial dataset to producing the second-level predictions, as depicted in the following figure.
+                        </p>
+
+                        <div class="d-flex justify-content-center">
+                            <figure class="figure">
+                                <img src="/img/blog/sf-crime/ensemble.svg" class="figure-img img-fluid" alt="Stacking Ensemble"/>
+                                <figcaption class="figure-caption text-center">Methodology to develop a stacked generalization ensemble</figcaption>
+                            </figure>
+                        </div>
+
+                        <p>
+                            Firstly, the initial dataset is split into k folds through a stratified sampling method. In particular, the resulting folds are different from each other, i.e., a crime instance belongs to only one fold. Secondly, k base models are trained, one per each fold. Thirdly, the first-level predictions, i.e., the outputs from the base models, are combined depending on the stacking technique the meta-model implements. Finally, the meta-model outputs the second-level predictions.
+                        </p>
+
+                        <h2 class="h3">Results</h2>
+
+                        <p>
+                            Through a cross-validation process, the best base models and meta-models were found and accordingly trained to assign a crime category to each record in the test set. Furthermore, third-level predictions were produced by combining those from the two best meta-models.
+                        </p>
+
+                        <div class="table-responsive d-flex justify-content-center">
+                            <table class="table table-striped" style="max-width: 500px; font-size: .875rem;">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Meta-model Description</th>
+                                        <th scope="col">Multi-class Logarithmic Loss</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>The first-ranked meta-model</td>
+                                        <td>2.56294</td>
+                                    </tr>
+                                    <tr>
+                                        <td>The second-ranked meta-model</td>
+                                        <td>2.56539</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Third-level predictions</td>
+                                        <td>2.56044</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p>
+                            The above table shows the multi-class logarithmic loss of the predictions from the three meta-models on the test set. In the first place, results show that the two best meta-models learned to accurately generalize on unseen data (i.e., the test set), as the overall difference between validation scores and test scores is really small.
+                        </p>
+
+                        <p>
+                            In the second place, producing third-level predictions remarkably outperforms those from the two best meta-models. In particular, the decreases in <i>log loss</i> are 0.19% and 0.098% when compared to the performance of the second- and first-ranked meta-models, respectively.
+                        </p>
+
+                        <p>
+                            Overall, these results are satisfactory, although the best result achieved is relatively larger than the best-reported result for the competition, i.e., <b>1.95936</b>.
+                        </p>
+
+                        <h2 class="h3">Further Reading</h2>
+
+                        <p>
+                            The entire solution approach is available as a <a href="https://nbviewer.jupyter.org/github/jacerong/kaggle/blob/master/sf-crime/solution-approach.ipynb">Jupyter notebook</a>. The notebook shows the source code and a more detailed description of the experimentation. Likewise, the author invites the reader to visit his <a href="https://github.com/jacerong/kaggle">repository</a> aimed at publishing and, more importantly, sharing solution approaches to Kaggle's challenges.
+                        </p>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+
+        <footer class="container-fluid mt-auto">
+
+            <div class="footer-content row">
+
+                <div class="col-lg-9">
+                    &copy; 2020. Jhon Adrián Cerón-Guzmán.
+                </div>
+
+                <div class="col-lg-3 text-light">
+                    <ul class="list-inline float-lg-right">
+                        <li class="list-inline-item mx-0">
+                            <a href="/email.html" class="text-decoration-none">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item mx-3">
+                            <a href="https://twitter.com/jacerong" class="text-decoration-none">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item mx-0">
+                            <a href="https://github.com/jacerong" class="text-decoration-none">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item ml-3">
+                            <a href="https://www.linkedin.com/in/jacerong/" class="text-decoration-none">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </footer>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    </body>
+</html>
