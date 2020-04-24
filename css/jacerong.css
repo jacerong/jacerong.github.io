@@ -6,6 +6,11 @@ nav.navigation {
     padding: 10em 10% 10em 10%;
 }
 
+.padding-top-bottom-10em {
+    padding-top: 10em;
+    padding-bottom: 10em;
+}
+
 img.personal-pic {
     width: 150px;
     border-radius: 100%;
