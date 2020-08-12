@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en" class="h-100">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, shrink-to-fit=no">
+
+        <title>Language Identification</title>
+        <meta name="description" content="This article describes an approach to predict the language in which a document is written. Experimental results show that the proposed approach is capable of identifying 14 languages with high accuracy.">
+
+        <meta name="google-site-verification" content="lR2k4umbURXr9sVdxA7bfpuecn4iA0OE6DlN9eeAxSI" />
+
+        <!-- Open Graph -->
+        <meta property="og:title" content="Language Identification" />
+        <meta property="og:description" content="This article describes an approach to predict the language in which a document is written. Experimental results show that the proposed approach is capable of identifying 14 languages with high accuracy." />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://jacerong.com/blog/language-identification.html" />
+        <meta property="og:image" content="https://jacerong.com/img/blog/langid/bonjour.jpg" />
+
+        <!-- Icon -->
+        <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+
+        <!-- CSS Files -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/jacerong.css">
+    </head>
+    <body class="d-flex flex-column h-100">
+
+        <!-- Navigation -->
+        <header>
+
+            <nav class="navigation navbar navbar-expand-lg navbar-light bg-white fixed-top">
+
+                <div class="container-fluid">
+
+                    <a class="navbar-brand d-flex align-items-center" href="/">
+                        <img src="/img/logo.svg" width="20" height="20">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-links" aria-controls="navbar-links" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <!-- Navigation Links -->
+                    <div class="collapse navbar-collapse" id="navbar-links">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="/blog/">Blog</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/resources.html">Resources</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- End Navigation Links -->
+
+                </div>
+
+            </nav>
+
+        </header>
+        <!-- End Navigation -->
+
+        <!-- Page Content -->
+        <main role="main" class="flex-shrink-0 padding-top-bottom-10em">
+
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-lg-12 margin-auto">
+                        <h1 class="font-weight-bolder mb-0">
+                            Language Identification
+                        </h1>
+                        <p class="mt-2 mb-4">
+                            <small class="text-secondary">by Jhon Adrián Cerón-Guzmán on August 12, 2020</small>
+                        </p>
+
+                        <p>
+                            To identify the language in which a document, message, or sentence is written, I propose the following methodology. First, to transform a text into character n-gram features. Second, to build a machine-learned classifier to predict the language in which a text is written, using those character n-gram features to support the predictive power. Last, to evaluate the performance of the approach proposed here on a variety of datasets and against some of the most popular language identification libraries in the Python ecosystem.
+                        </p>
+
+                        <p>
+                            Moreover, it is worth making clear that the identification capability will be limited to 14 out of 24 languages the European Union officially has, namely:
+                        </p>
+
+                        <ol>
+                            <li>Czech</li>
+                            <li>Danish</li>
+                            <li>Dutch</li>
+                            <li>English</li>
+                            <li>Finnish</li>
+                            <li>French</li>
+                            <li>German</li>
+                            <li>Hungarian</li>
+                            <li>Italian</li>
+                            <li>Polish</li>
+                            <li>Portuguese</li>
+                            <li>Romanian</li>
+                            <li>Spanish</li>
+                            <li>Swedish</li>
+                        </ol>
+
+                        <p>
+                            The above languages were chosen due to data availability matters, but mostly because their alphabet is based on modern Latin.
+                        </p>
+
+                        <h2 class="h3">Language Identification System</h2>
+
+                        <p>
+                            The system architecture can be viewed as a pipeline consisting of a text preprocessing module, a vectorizer that transforms text into character n-gram features, and a machine-learned classifier that predicts the language in which a document, message, or sentence is written. The following figure illustrates this architecture.
+                        </p>
+
+                        <div class="d-flex justify-content-center">
+                            <figure class="figure">
+                                <img src="/img/blog/langid/architecture.svg" class="figure-img img-fluid rounded img-thumbnail" alt="Language Identification System Architecture"/>
+                                <figcaption class="figure-caption text-center">
+                                    System Architecture
+                                </figcaption>
+                            </figure>
+                        </div>
+
+                        <p>
+                            First, the text normalizer removes non-alphabetic characters from a text and converts those alphabetic to lowercase. Next, the vectorizer transforms the preprocessed, normalized, or cleaned text into character n-gram features. In particular, it applies the <i>tf-idf</i> weighting scheme to learn feature vectors. Last, the machine-learned classifier receives those character n-gram features and assigns a class label to the input text. This class label corresponds to the language in which the classifier predicts a document, message, or sentence is written.
+                        </p>
+
+                        <h3 class="h4">Machine-learned Classification</h3>
+
+                        <p>
+                            A large number of experiments were designed and run to find out how much data are required to build a system capable of identifying—with high accuracy—the language in which a document, message, or sentence is written. For this reason, machine-learned classifiers were trained on a variety of collections, drawn according to different sampling criteria, namely: sampling method, sample size, minimum sentence length, and whether to discard sentences whose length is less than a threshold or merge them into one until its length is greater than or equal to a given threshold. In this way, 290 classifiers were trained.
+                        </p>
+
+                        <p>
+                            As 75% of language identification models (i.e., vectorizer plus classifier) weighed less than 5,184 kilobytes (approximately 5.2 megabytes), and the size of half of them was less than 2,796 kilobytes (approximately 2.8 megabytes), the following strategy was proposed to find out which is the best language identification model per size range. First, the model with the highest accuracy and whose size is less than 967 kilobytes will be the best in the small range. Second, the model with the highest accuracy and whose size ranges from 967 to 5,184 kilobytes will be the best in the medium range. Last, the large model will be selected from those weighing more than 5,184 kilobytes.
+                        </p>
+
+                        <div class="table-responsive d-flex justify-content-center">
+                            <table class="table table-striped" style="max-width: 500px; font-size: .875rem;">
+                                <caption>
+                                    The best language identification model per size range
+                                </caption>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Size Range</th>
+                                        <th scope="col">Accuracy</th>
+                                        <th scope="col">Size (kilobytes)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Small</td>
+                                        <td>0.9789</td>
+                                        <td>876.25</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Medium</td>
+                                        <td>0.9926</td>
+                                        <td>1,875.11</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Large</td>
+                                        <td>0.9949</td>
+                                        <td>12,772.91</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h2 class="h3">Experiments</h2>
+
+                        <p>
+                            First, let's list the libraries through which the ability of the approach proposed here will be compared:
+                        </p>
+
+                        <ol>
+                            <li>
+                                <a href="https://github.com/saffsd/langid.py" class="text-decoration-none"><b>langid</b></a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/Mimino666/langdetect" class="text-decoration-none"><b>langdetect</b></a>
+                            </li>
+                            <li>
+                                <a href="https://fasttext.cc/blog/2017/10/02/blog-post.html" class="text-decoration-none"><b>fasttext</b></a> (small pre-trained model)
+                            </li>
+                        </ol>
+
+                        <p>
+                            Hereinafter, the proposed approach will be identified as <i><b>idendioma</b></i>.
+                        </p>
+
+                        <p>
+                            Second, let's list the datasets on which the performance of the proposed approach will be evaluated and compared to several third-party language identification libraries:
+                        </p>
+
+                        <ol>
+                            <li>
+                                <a href="https://tatoeba.org/eng" class="text-decoration-none"><b>Tatoeba</b></a>: it is a large collection of sentences. (On the download date, July 29, 2020, this collection consists of 8,544,796 sentences.)
+                            </li>
+                            <li>
+                                <a href="https://arxiv.org/pdf/1801.07779.pdf" class="text-decoration-none"><b>WiLI-2018</b></a>: it is a collection of paragraphs extracted from articles written in one in 235 languages that <a href="https://wikipedia.org/" class="text-decoration-none">Wikipedia</a> supports.
+                            </li>
+                            <li>
+                                <a href="https://www.win.tue.nl/~mpechen/projects/smm/#Datasets" class="text-decoration-none"><b>LIGA</b></a>: it is a collection of preprocessed tweets written in one out of six languages, namely: German, English, Spanish, French, Italian, and Dutch.
+                            </li>
+                        </ol>
+
+                        <h3 class="h4">Tatoeba</h3>
+
+                        <p>
+                            A sample was uniformly drawn from this large collection of sentences to evaluate the performance of the different language identification systems. More specifically, it is made up of 1,000 sentences per language, i.e., 14,000 sentences in total.
+                        </p>
+
+                        <div class="d-flex justify-content-center">
+                            <figure class="figure">
+                                <img src="/img/blog/langid/tatoeba-performance.png" class="figure-img img-fluid rounded" alt="Performance Evaluation on the Tatoeba Dataset"/>
+                                <figcaption class="figure-caption text-center">
+                                    Performance Evaluation on the Tatoeba Dataset
+                                </figcaption>
+                            </figure>
+                        </div>
+
+                        <p>
+                            As depicted in the above figure and expected, the performance of the proposed approach, whatever the size range, is better than that of third-party libraries, as different language identification models have been trained on only Tatoeba data.
+                        </p>
+
+                        <h3 class="h4">WiLI-2018</h3>
+
+                        <p>
+                            This dataset is made up of 500 paragraphs per language. In total, there are 7,000 paragraphs written in one out of 14 languages.
+                        </p>
+
+                        <div class="d-flex justify-content-center">
+                            <figure class="figure">
+                                <img src="/img/blog/langid/wili-performance.png" class="figure-img img-fluid rounded" alt="Performance Evaluation on the WiLI-2018 Dataset"/>
+                                <figcaption class="figure-caption text-center">
+                                    Performance Evaluation on the WiLI-2018 Dataset
+                                </figcaption>
+                            </figure>
+                        </div>
+
+                        <p>
+                            Overall, the performance of the <b>fasttext</b> library is the best, even though the difference with the second best-ranked model, i.e., <b>idendioma (large)</b>, is negligible.
+                        </p>
+
+                        <h3 class="h4">LIGA</h3>
+
+                        <p>
+                            First, let's describe this dataset, aggregating the number of samples for each language.
+                        </p>
+
+                        <div class="table-responsive d-flex justify-content-center">
+                            <table class="table table-striped" style="max-width: 500px; font-size: .875rem;">
+                                <caption>
+                                    Language distribution
+                                </caption>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Language</th>
+                                        <th scope="col">Count</th>
+                                        <th scope="col">Fraction</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Spanish</td>
+                                        <td>1,562</td>
+                                        <td>0.172292</td>
+                                    </tr>
+                                    <tr>
+                                        <td>French</td>
+                                        <td>1,551</td>
+                                        <td>0.171079</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Italian</td>
+                                        <td>1,539</td>
+                                        <td>0.169755</td>
+                                    </tr>
+                                    <tr>
+                                        <td>English</td>
+                                        <td>1,505</td>
+                                        <td>0.166005</td>
+                                    </tr>
+                                    <tr>
+                                        <td>German</td>
+                                        <td>1,479</td>
+                                        <td>0.163137</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dutch</td>
+                                        <td>1,430</td>
+                                        <td>0.157732</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="d-flex justify-content-center">
+                            <figure class="figure">
+                                <img src="/img/blog/langid/liga-performance.png" class="figure-img img-fluid rounded" alt="Performance Evaluation on the LIGA Dataset"/>
+                                <figcaption class="figure-caption text-center">
+                                    Performance Evaluation on the LIGA Dataset
+                                </figcaption>
+                            </figure>
+                        </div>
+
+                        <p>
+                            In terms of accuracy, the performance of the approach proposed here is the best (i.e., 0.9902). Instead, the <b>fasttext</b> library achieves the highest F1 score (i.e., 0.5941). Last, it is worth stating that it seems incoherent that all models perform so poorly in terms of the F1 score, considering that the language distribution of this dataset is uniform. Therefore, further investigation of this matter is required.
+                        </p>
+
+                        <h2 class="h3">Further Reading</h2>
+
+                        <p>
+                            The entire solution approach is available as a <a href="https://nbviewer.jupyter.org/github/jacerong/language-identification/blob/master/langid.ipynb" class="text-decoration-none">Jupyter notebook</a>. The notebook shows the source code and a more detailed description of the experimentation. Likewise, the author invites the reader to visit the GitHub <a href="https://github.com/jacerong/language-identification" class="text-decoration-none">repository</a>.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+
+        <footer class="container-fluid mt-auto">
+
+            <div class="footer-content row">
+
+                <div class="col-lg-9">
+                    &copy; 2020. Jhon Adrián Cerón-Guzmán.
+                </div>
+
+                <div class="col-lg-3 text-light">
+                    <ul class="list-inline float-lg-right">
+                        <li class="list-inline-item mx-0">
+                            <a href="/email.html" class="text-decoration-none">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item mx-3">
+                            <a href="https://twitter.com/jacerong" class="text-decoration-none">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item mx-0">
+                            <a href="https://github.com/jacerong" class="text-decoration-none">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item ml-3">
+                            <a href="https://www.linkedin.com/in/jacerong/" class="text-decoration-none">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </footer>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-92988800-2"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'UA-92988800-2');
+        </script>
+    </body>
+</html>
